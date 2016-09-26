@@ -74,12 +74,14 @@ class GoogleSignin {
     return new Promise((resolve, reject) => {
       const sucessCb = NativeAppEventEmitter.addListener('RNGoogleSignInSuccess', (user) => {
         this._user = user;
-        this._removeListeners(sucessCb, errorCb);
+        sucessCb.remove();
+        errorCb.remove();
         resolve(user);
       });
 
       const errorCb = NativeAppEventEmitter.addListener('RNGoogleSignInError', () => {
-        this._removeListeners(sucessCb, errorCb);
+        sucessCb.remove();
+        errorCb.remove();
         resolve(null);
       });
 
@@ -96,12 +98,14 @@ class GoogleSignin {
       const sucessCb = NativeAppEventEmitter.addListener('RNGoogleSignInSuccess', (user) => {
         this._user = user;
         this.signinIsInProcess = false;
-        this._removeListeners(sucessCb, errorCb);
+        sucessCb.remove();
+        errorCb.remove();
         resolve(user);
       });
 
       const errorCb = NativeAppEventEmitter.addListener('RNGoogleSignInError', (err) => {
-        this._removeListeners(sucessCb, errorCb);
+        sucessCb.remove();
+        errorCb.remove();
         this.signinIsInProcess = false;
         reject(err);
       });
@@ -120,12 +124,14 @@ class GoogleSignin {
   revokeAccess() {
     return new Promise((resolve, reject) => {
       const sucessCb = NativeAppEventEmitter.addListener('RNGoogleRevokeSuccess', () => {
-        this._removeListeners(sucessCb, errorCb);
+        sucessCb.remove();
+        errorCb.remove();
         resolve();
       });
 
       const errorCb = NativeAppEventEmitter.addListener('RNGoogleRevokeError', (err) => {
-        this._removeListeners(sucessCb, errorCb);
+        sucessCb.remove();
+        errorCb.remove();
         reject(err);
       });
 
@@ -133,9 +139,6 @@ class GoogleSignin {
     });
   }
 
-  _removeListeners(...listeners) {
-    listeners.forEach(lt => lt.remove());
-  }
 }
 
 const GoogleSigninSingleton = new GoogleSignin();
