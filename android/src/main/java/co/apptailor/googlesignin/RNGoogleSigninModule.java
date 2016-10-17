@@ -47,7 +47,6 @@ public class RNGoogleSigninModule extends ReactContextBaseJavaModule implements 
         reactContext.addActivityEventListener(this);
     }
 
-    @Override
     public void onNewIntent(Intent intent) {}
 
     @Override
